@@ -25,8 +25,4 @@
     <ProjectReference Include="..\Listfy_Domain\Listfy_Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>
