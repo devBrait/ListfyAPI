@@ -7,10 +7,18 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Load();
+DotNetEnv.Env.Load(".env.development");
+
+var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+var user = Environment.GetEnvironmentVariable("POSTGRES_USER");
+var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+var db = Environment.GetEnvironmentVariable("POSTGRES_DB");
+
+var connectionString = $"Host={host};Port={port};Username={user};Password={password};Database={db}";
 
 builder.Services.AddDbContext<DataContext>(x => 
-    x.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+    x.UseNpgsql(connectionString));
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
