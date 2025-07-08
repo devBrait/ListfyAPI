@@ -1,12 +1,14 @@
 using DotNetEnv;
+using FluentValidation;
 using Listfy_Application.Services;
 using Listfy_Domain.Interfaces;
+using Listfy_Domain.Validators;
 using Listfy_Infrastructure.Context;
 using Listfy_Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+    
 DotNetEnv.Env.Load(".env.development");
 
 var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
@@ -24,6 +26,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<SecurityService>();
+builder.Services.AddValidatorsFromAssemblyContaining<UserDTOValidator>(); 
 
 builder.Services.AddControllers();
 
