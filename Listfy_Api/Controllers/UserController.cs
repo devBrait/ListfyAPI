@@ -1,7 +1,5 @@
 using Listfy_Application.Services;
 using Listfy_Domain.DTOs;
-using Listfy_Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Listfy_Api.Controllers
@@ -18,10 +16,17 @@ namespace Listfy_Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody]UserDTO user)
+        public async Task<IActionResult> RegisterAsync([FromBody]UserDTO user)
         {
             var newUser = await _userService.CreateAsync(user);
-            return Ok(newUser);
+            return StatusCode(201, newUser);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            var users = await _userService.GetAllAsync();
+            return Ok(users);
         }
     }
 }
