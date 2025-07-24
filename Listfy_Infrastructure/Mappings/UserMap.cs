@@ -29,6 +29,10 @@ public class UserMap : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasColumnType("varchar(255)");
 
+        builder.Property(x => x.roleId)
+            .IsRequired()
+            .HasDefaultValue(1);    
+
         builder.Property(x => x.created_at)
             .HasColumnName("CreatedAt")
             .HasColumnType("timestamp with time zone");
