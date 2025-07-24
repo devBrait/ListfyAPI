@@ -1,9 +1,11 @@
 using Listfy_Application.Services;
 using Listfy_Domain.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Listfy_Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -12,9 +14,9 @@ namespace Listfy_Api.Controllers
 
         public UserController(UserService userService)
         {
-            _userService = userService;
+            _userService = userService; 
         }
-
+        
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody]UserDTO user)
         {

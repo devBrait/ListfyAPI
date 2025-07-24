@@ -1,3 +1,4 @@
+using System.Text;
 using DotNetEnv;
 using FluentValidation;
 using Listfy_Application.Services;
@@ -7,10 +8,11 @@ using Listfy_Infrastructure.Auth;
 using Listfy_Infrastructure.Context;
 using Listfy_Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
     
-DotNetEnv.Env.Load(".env.development");
+Env.Load(".env.development");
 
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -37,6 +39,28 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<SecurityService>();
 builder.Services.AddValidatorsFromAssemblyContaining<UserDTOValidator>(); 
 
+
+var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
+var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+var key = Environment.GetEnvironmentVariable("JWT_KEY") ?? String.Empty;
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(key))
+        };
+    });
+builder.Services.AddAuthorization();
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -50,6 +74,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
