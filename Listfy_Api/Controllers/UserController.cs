@@ -17,8 +17,8 @@ namespace Listfy_Api.Controllers
             _userService = userService; 
         }
         
-        [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody]UserDTO user)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateAsync([FromBody]UserDTO user)
         {
             var newUser = await _userService.CreateAsync(user);
             return StatusCode(201, newUser);
