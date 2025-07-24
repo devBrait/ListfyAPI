@@ -24,18 +24,18 @@ public class UserService
         if (!result.IsValid)
             throw new Exception(string.Join(" ",result.Errors.Select(e => e.ErrorMessage)));
 
-        var userAlreadyExists = await _userRepository.GetByEmailAsync(user.email);
+        var userAlreadyExists = await _userRepository.GetByEmailAsync(user.Email);
         if (userAlreadyExists != null)
             throw new Exception("An account with this email address already exists. Please use a different email.");
         
-        var hash = _securityService.HashPassword(user.password);
+        var hash = _securityService.HashPassword(user.Password);
         var newUser = new User
         {
-            name = user.name,
-            user_name = user.user_name,
-            email = user.email,
+            name = user.Name,
+            user_name = user.UserName,
+            email = user.Email,
             password = hash,
-            created_at = user.created_at
+            created_at = user.CreatedAt
         };
         
         _userRepository.Add(newUser);

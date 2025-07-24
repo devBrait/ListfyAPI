@@ -1,5 +1,6 @@
 using Listfy_Domain.DTOs;
 using Listfy_Domain.Entities;
+using Listfy_Domain.Enums;
 using Listfy_Domain.Interfaces;
 using Listfy_Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +14,13 @@ public class UserRepository(DataContext context) : Repository<User>(context), IU
         return await _context.User
             .Select(user => new UserDTO
             {
-                id = user.id,
-                name = user.name,
-                user_name = user.user_name,
-                email = user.email,
-                password = user.password,
-                created_at = user.created_at,
-                updated_at = user.updated_at,
+                Id = user.id,
+                Name = user.name,
+                UserName = user.user_name,
+                Email = user.email,
+                Password = user.password,
+                CreatedAt = user.created_at,
+                UpdatedAt = user.updated_at,
             }).ToListAsync();
     }
 
@@ -30,13 +31,14 @@ public class UserRepository(DataContext context) : Repository<User>(context), IU
 
         var userDTO = new UserDTO
         {
-            id = user.id,
-            name = user.name,
-            user_name = user.user_name,
-            email = user.email,
-            password = user.password,
-            created_at = user.created_at,
-            updated_at = user.updated_at,
+            Id = user.id,
+            Name = user.name,
+            UserName = user.user_name,
+            Email = user.email,
+            Password = user.password,
+            Role = (RoleEnum)user.roleId,
+            CreatedAt = user.created_at,
+            UpdatedAt = user.updated_at,
         };
         
         return userDTO; 

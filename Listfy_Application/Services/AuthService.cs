@@ -16,9 +16,9 @@ public class AuthService
 
     public async Task<string> LoginAsync(LoginDTO login)
     {
-        var user = await _userRepository.GetByEmailAsync(login.email);  
+        var user = await _userRepository.GetByEmailAsync(login.Email);  
         
-        if(user is null || !BCrypt.Net.BCrypt.Verify(login.password, user.password))
+        if(user is null || !BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
             throw new Exception("Incorrect credentials");
         
         return _tokenService.GenerateToken(user);
